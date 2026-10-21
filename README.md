@@ -9,7 +9,7 @@ The corpus is English. A Chinese document stored in the knowledge base is retrie
 | Path | What lands here |
 |:---|:---|
 | `frontend/` | Web client. Own image, own Deployment. |
-| `backend/` | Q&A API, tool service, retrieval, and the three queue clients. Own image. |
+| `backend/` | Libraries plus three processes: `mcp/` (own image), `api/` and `worker/` (one image, two commands). |
 | `deploy/` | How the two images are installed: Helm, and the AWS bindings for MSK, RDS, and S3. |
 | `harness/` | Eval suites, tasks, and the checks that a change did not degrade retrieval or the agent. |
 | `knowledge/` | Documents that are stored, chunked, and embedded. Seed data lives here, not in `backend/`. |
