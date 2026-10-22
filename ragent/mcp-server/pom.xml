@@ -33,7 +33,7 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
 
-        <!-- 比特严选业务库，本模块第一次有数据库；不引 MyBatis-Plus 是因为这里没有 entity/mapper 层，工具就是十几条手写 SQL -->
+        <!-- BitSelect business database. This module's first database; MyBatis-Plus is omitted because there is no entity/mapper layer, and the tools are a dozen handwritten SQL statements -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>

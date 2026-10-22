@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>bootstrap</artifactId>
+    <description>Startup assembly: the application class and configuration only. Business code does not belong here.</description>
     <dependencies>
         <dependency>
             <groupId>com.nageoffer.ai</groupId>
@@ -48,7 +49,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
-                    <!-- 生成 build-info.properties 供链路追踪读 service.version -->
+                    <!-- Write build-info.properties so traces can read service.version. -->
                     <execution>
                         <goals>
                             <goal>build-info</goal>
