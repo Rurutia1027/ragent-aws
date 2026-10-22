@@ -1,0 +1,42 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.nageoffer.ai.ragent.infra.model;
+
+/**
+ * Functional interface for invoking a model
+ * <p>
+ * Defines a generic model call used to run model operations.
+ * The type parameters allow different client and return types.
+ * </p>
+ *
+ * @param <C> client type used to call the model
+ * @param <T> return type of the model call
+ */
+@FunctionalInterface
+public interface ModelCaller<C, T> {
+
+    /**
+     * Invoke the model
+     *
+     * @param client model client used to talk to the model
+     * @param target model target, including the information required for the call
+     * @return result of the model call
+     * @throws Exception when the model call fails
+     */
+    T call(C client, ModelTarget target) throws Exception;
+}
