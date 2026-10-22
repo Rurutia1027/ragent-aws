@@ -43,6 +43,8 @@ node_modules/
 dist/
 .vite/
 .env.local
+*.tsbuildinfo
+.DS_Store
 resources/docker/graphrag/.env
 
 ### Tmp Out ###
