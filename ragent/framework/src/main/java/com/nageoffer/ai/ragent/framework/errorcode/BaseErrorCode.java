@@ -1,109 +1,122 @@
 package com.nageoffer.ai.ragent.framework.errorcode;
 
+/**
+ * Standard error codes.
+ *
+ * <p>
+ * Standard codes used across the system, following the A/B/C grouping:
+ * <ul>
+ *   <li>A: client errors</li>
+ *   <li>B: service execution errors</li>
+ *   <li>C: third-party service errors</li>
+ * </ul>
+ * Defined once in this module so services do not each invent the same codes.
+ * </p>
+ */
 public enum BaseErrorCode implements IErrorCode {
 
-    // ========== A 类错误：用户端错误 ==========
+    // ========== A: client errors ==========
 
     /**
-     * 一级宏观错误码：客户端错误
+     * Top-level client error.
      */
     CLIENT_ERROR("A000001", "Client error"),
 
-    // ========== A01 用户注册错误 ==========
+    // ========== A01 registration errors ==========
 
     /**
-     * 二级宏观错误码：用户注册错误
+     * Registration error.
      */
     USER_REGISTER_ERROR("A000100", "User registration error"),
 
     /**
-     * 用户名校验失败
+     * Username validation failed.
      */
     USER_NAME_VERIFY_ERROR("A000110", "Username validation failed"),
 
     /**
-     * 用户名已存在
+     * Username already exists.
      */
     USER_NAME_EXIST_ERROR("A000111", "Username already exists"),
 
     /**
-     * 用户名包含敏感词
+     * Username contains a sensitive word.
      */
     USER_NAME_SENSITIVE_ERROR("A000112", "Username contains a sensitive word"),
 
     /**
-     * 用户名包含特殊字符
+     * Username contains a special character.
      */
     USER_NAME_SPECIAL_CHARACTER_ERROR("A000113", "Username contains a special character"),
 
     /**
-     * 密码校验失败
+     * Password validation failed.
      */
     PASSWORD_VERIFY_ERROR("A000120", "Password validation failed"),
 
     /**
-     * 密码长度不够
+     * Password is too short.
      */
     PASSWORD_SHORT_ERROR("A000121", "Password is too short"),
 
     /**
-     * 手机号格式校验失败
+     * Phone number format is invalid.
      */
     PHONE_VERIFY_ERROR("A000151", "Phone number format is invalid"),
 
-    // ========== A02 幂等性错误 ==========
+    // ========== A02 idempotency errors ==========
 
     /**
-     * 幂等 Token 为空
+     * Idempotency token is empty.
      */
     IDEMPOTENT_TOKEN_NULL_ERROR("A000200", "Idempotency token is empty"),
 
     /**
-     * 幂等 Token 已被使用或失效
+     * Idempotency token was already used or has expired.
      */
     IDEMPOTENT_TOKEN_DELETE_ERROR("A000201", "Idempotency token has already been used or has expired"),
 
-    // ========== A03 查询参数错误 ==========
+    // ========== A03 query parameter errors ==========
 
     /**
-     * 查询数据量超过最大限制
+     * Query size exceeds the maximum.
      */
     SEARCH_AMOUNT_EXCEEDS_LIMIT("A000300", "Query size exceeds the maximum"),
 
-    // ========== B 类错误：系统执行错误 ==========
+    // ========== B: service execution errors ==========
 
     /**
-     * 一级宏观错误码：系统执行出错
+     * Top-level service execution error.
      */
     SERVICE_ERROR("B000001", "System execution error"),
 
     /**
-     * 二级宏观错误码：系统执行超时
+     * Service execution timed out.
      */
     SERVICE_TIMEOUT_ERROR("B000100", "System execution timed out"),
 
-    // ========== C 类错误：第三方服务错误 ==========
+    // ========== C: third-party service errors ==========
 
     /**
-     * 一级宏观错误码：调用第三方服务出错
+     * Top-level third-party service error.
      */
     REMOTE_ERROR("C000001", "Third-party service error");
 
     /**
-     * 错误码
+     * Error code.
      */
     private final String code;
 
     /**
-     * 错误消息
+     * Error message.
      */
     private final String message;
 
     /**
-     * 构造函数
+     * Constructor.
      *
-     * @param code    错误码
-     * @param message 错误消息
+     * @param code    error code
+     * @param message error message
      */
     BaseErrorCode(String code, String message) {
         this.code = code;

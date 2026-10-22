@@ -8,10 +8,16 @@ import com.nageoffer.ai.ragent.framework.database.MyMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * Persistence configuration.
+ * Registers the MyBatis-Plus plugins used by the application.
+ */
 @Configuration
 public class DataBaseConfiguration {
+
     /**
-     * MyBatis-Plus PostgreSQL pagination plugin
+     * MyBatis-Plus pagination plugin for PostgreSQL.
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -21,7 +27,7 @@ public class DataBaseConfiguration {
     }
 
     /**
-     * MyBatis-Plus source data auto-fill
+     * MyBatis-Plus meta-object filler.
      */
     @Bean
     public MetaObjectHandler myMetaObjectHandler() {

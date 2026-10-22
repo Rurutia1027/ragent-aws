@@ -5,7 +5,11 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import java.util.Date;
 
+/**
+ * MyBatis-Plus meta-object filler.
+ */
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
     @Override
     public void insertFill(MetaObject metaObject) {
         strictInsertFill(metaObject, "createTime", Date::new, Date.class);

@@ -5,10 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Web Auto Config
+ * Auto-configuration for web components.
  */
 @Configuration
 public class WebAutoConfiguration {
+
+    /**
+     * Registers the global exception handler.
+     */
     @Bean
     public GlobalExceptionHandler globalExceptionHandler() {
         return new GlobalExceptionHandler();

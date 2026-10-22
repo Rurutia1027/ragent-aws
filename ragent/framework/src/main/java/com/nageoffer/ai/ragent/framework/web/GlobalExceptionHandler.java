@@ -26,6 +26,10 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.Optional;
 
+/**
+ * Global exception handler.
+ * Turns known exceptions into the uniform JSON envelope.
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -37,13 +41,13 @@ public class GlobalExceptionHandler {
     private String maxRequestSize;
 
     /**
-     * 拦截参数验证异常
+     * Handles bean-validation failures on a request body.
      */
     @SneakyThrows
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Result<Void>> validExceptionHandler(HttpServletRequest request,
-                                                              HttpServletResponse response,
-                                                              MethodArgumentNotValidException ex) {
+                                                             HttpServletResponse response,
+                                                             MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         FieldError firstFieldError = CollectionUtil.getFirst(bindingResult.getFieldErrors());
         String exceptionStr = Optional.of(firstFieldError)
@@ -54,13 +58,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 拦截方法参数校验异常
-     * 不接住会落到兜底分支，前端只能看到一句「系统执行出错」
+     * Handles method-parameter validation failures.
+     * Without this handler the failure falls through to the generic branch and the client only sees a system error.
      */
     @ExceptionHandler(value = HandlerMethodValidationException.class)
     public ResponseEntity<Result<Void>> methodValidationExceptionHandler(HttpServletRequest request,
-                                                                         HttpServletResponse response,
-                                                                         HandlerMethodValidationException ex) {
+                                                                        HttpServletResponse response,
+                                                                        HandlerMethodValidationException ex) {
         String message = ex.getParameterValidationResults().stream()
                 .flatMap(result -> result.getResolvableErrors().stream())
                 .map(MessageSourceResolvable::getDefaultMessage)
@@ -72,12 +76,12 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 拦截应用内抛出的异常
+     * Handles exceptions thrown by application code.
      */
     @ExceptionHandler(value = {AbstractException.class})
     public ResponseEntity<Result<Void>> abstractException(HttpServletRequest request,
-                                                          HttpServletResponse response,
-                                                          AbstractException ex) {
+                                                         HttpServletResponse response,
+                                                         AbstractException ex) {
         if (ex.getCause() != null) {
             log.error("[{}] {} [ex] {}", request.getMethod(), request.getRequestURL().toString(), ex, ex.getCause());
             return jsonError(response, Results.failure(ex));
@@ -93,35 +97,35 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 拦截未登录异常
+     * Handles a missing login.
      */
     @ExceptionHandler(value = NotLoginException.class)
     public ResponseEntity<Result<Void>> notLoginException(HttpServletRequest request,
-                                                          HttpServletResponse response,
-                                                          NotLoginException ex) {
+                                                         HttpServletResponse response,
+                                                         NotLoginException ex) {
         log.warn("[{}] {} [auth] not-login: {}", request.getMethod(), getUrl(request), ex.getMessage());
         return jsonError(response, Results.failure(BaseErrorCode.CLIENT_ERROR.code(), "Not signed in or the session has expired"));
     }
 
     /**
-     * 拦截无角色权限异常
+     * Handles a missing role.
      */
     @ExceptionHandler(value = NotRoleException.class)
     public ResponseEntity<Result<Void>> notRoleException(HttpServletRequest request,
-                                                         HttpServletResponse response,
-                                                         NotRoleException ex) {
+                                                        HttpServletResponse response,
+                                                        NotRoleException ex) {
         log.warn("[{}] {} [auth] no-role: {}", request.getMethod(), getUrl(request), ex.getMessage());
         return jsonError(response, Results.failure(BaseErrorCode.CLIENT_ERROR.code(), "Insufficient permissions"));
     }
 
     /**
-     * 拦截文件上传大小超限异常
+     * Handles an upload that exceeds the size limit.
      */
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     public ResponseEntity<Result<Void>> maxUploadSizeExceededException(HttpServletRequest request,
-                                                                       HttpServletResponse response,
-                                                                       MaxUploadSizeExceededException ex) {
-        log.warn("[{}] {} [upload] 文件上传大小超限: {}", request.getMethod(), getUrl(request), ex.getMessage());
+                                                                      HttpServletResponse response,
+                                                                      MaxUploadSizeExceededException ex) {
+        log.warn("[{}] {} [upload] uploaded file exceeds the size limit: {}", request.getMethod(), getUrl(request), ex.getMessage());
         String message;
         if (ex.getCause() instanceof IllegalStateException
                 && ex.getCause().getCause() instanceof FileSizeLimitExceededException) {
@@ -133,19 +137,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 拦截未捕获异常
+     * Handles anything not matched above.
      */
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity<Result<Void>> defaultErrorHandler(HttpServletRequest request,
-                                                            HttpServletResponse response,
-                                                            Throwable throwable) {
+                                                           HttpServletResponse response,
+                                                           Throwable throwable) {
         log.error("[{}] {} ", request.getMethod(), getUrl(request), throwable);
         return jsonError(response, Results.failure());
     }
 
     /**
-     * 流建立前的错误明确返回 JSON，避免严格 SSE Accept 让 Result 找不到可写的媒体类型
-     * 保留 HTTP 200 + 业务错误码的既有约定；流已提交后只记录异常，不往 SSE 里追加 JSON
+     * Before the stream starts, return JSON so a strict SSE Accept header does not leave Result without a writable media type.
+     * Keeps the existing HTTP 200 plus business error code. Once the stream is committed, the error is only logged.
      */
     private ResponseEntity<Result<Void>> jsonError(HttpServletResponse response, Result<Void> result) {
         if (response.isCommitted()) {

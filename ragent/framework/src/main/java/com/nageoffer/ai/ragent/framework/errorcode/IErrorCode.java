@@ -1,14 +1,18 @@
 package com.nageoffer.ai.ragent.framework.errorcode;
 
+/**
+ * Platform error code.
+ * Implemented by each error-code type.
+ */
 public interface IErrorCode {
 
     /**
-     * 错误码
+     * Error code.
      */
     String code();
 
     /**
-     * 错误信息
+     * Error message.
      */
     String message();
 }

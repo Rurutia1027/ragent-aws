@@ -3,6 +3,10 @@ package com.nageoffer.ai.ragent.framework.exception;
 import com.nageoffer.ai.ragent.framework.errorcode.BaseErrorCode;
 import com.nageoffer.ai.ragent.framework.errorcode.IErrorCode;
 
+/**
+ * Client exception.
+ * Raised when the caller submits invalid input or otherwise fails on the client side.
+ */
 public class ClientException extends AbstractException {
 
     public ClientException(IErrorCode errorCode) {

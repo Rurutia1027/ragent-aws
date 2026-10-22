@@ -7,14 +7,14 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 全局统一返回结果对象
+ * Uniform API response.
  *
  * <p>
- * 用于规范化所有 API 接口的返回格式，确保前后端交互的一致性
- * 所有接口返回都应使用此对象包装，避免不同开发人员定义不一致的返回结构
+ * One response shape for every API, so clients do not have to handle a different envelope per endpoint.
+ * Wrap every response in this type.
  * </p>
  *
- * @param <T> 响应数据的类型
+ * @param <T> response payload type
  */
 @Data
 @Accessors(chain = true)
@@ -24,49 +24,49 @@ public class Result<T> implements Serializable {
     private static final long serialVersionUID = 5679018624309023727L;
 
     /**
-     * 成功状态码
+     * Success code.
      * <p>
-     * 当接口请求成功时，返回此状态码
+     * Returned when the request succeeds.
      * </p>
      */
     public static final String SUCCESS_CODE = "0";
 
     /**
-     * 状态码
+     * Status code.
      * <p>
-     * 标识请求的处理结果，{@code "0"} 表示成功，其他值表示各类错误或异常情况
+     * Processing result. {@code "0"} means success. Any other value is an error.
      * </p>
      */
     private String code;
 
     /**
-     * 响应消息
+     * Response message.
      * <p>
-     * 对本次请求结果的文字描述，成功时可为成功提示，失败时为错误原因说明
+     * Human-readable result. A success note, or the reason for a failure.
      * </p>
      */
     private String message;
 
     /**
-     * 响应数据
+     * Response payload.
      * <p>
-     * 接口返回的业务数据，类型由泛型 T 指定。请求失败时可能为 {@code null}
+     * Business payload. The type is {@code T}. May be {@code null} when the request fails.
      * </p>
      */
     private T data;
 
     /**
-     * 请求追踪 ID
+     * Request trace id.
      * <p>
-     * 用于链路追踪和问题排查，每个请求具有唯一的标识符
+     * Unique id for tracing and debugging.
      * </p>
      */
     private String requestId;
 
     /**
-     * 判断请求是否成功
+     * Whether the request succeeded.
      *
-     * @return 如果状态码为 {@link #SUCCESS_CODE}，返回 {@code true}；否则返回 {@code false}
+     * @return {@code true} when the code is {@link #SUCCESS_CODE}
      */
     public boolean isSuccess() {
         return SUCCESS_CODE.equals(code);

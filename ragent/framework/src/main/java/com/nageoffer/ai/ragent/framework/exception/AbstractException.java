@@ -6,6 +6,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
+/**
+ * Base type for the three exception families: client, service, and remote call.
+ */
 @Getter
 public abstract class AbstractException extends RuntimeException {
 
