@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    paths:
+      - "ragent/**"
+      - "buildspec.yml"
+      - ".github/workflows/ci.yaml"
+
+jobs:
+  build:
+    name: build ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - bootstrap
+          - mcp-server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          cache-dependency-path: ragent/pom.xml
+
+      - name: Package
+        working-directory: ragent
+        run: mvn -B -pl ${{ matrix.service }} -am package
+
+      - name: Build image
+        working-directory: ragent/${{ matrix.service }}
+        run: docker build -t ${{ matrix.service }}:${{ github.sha }} .
