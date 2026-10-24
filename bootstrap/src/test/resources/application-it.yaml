@@ -1,0 +1,13 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration
+  task:
+    scheduling:
+      enabled: false
+
+rag:
+  vector:
+    type: pg
+  mcp:
+    servers: []
