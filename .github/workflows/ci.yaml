@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+    paths:
+      - "pom.xml"
+      - "**/pom.xml"
+      - "**/src/**"
+      - ".github/workflows/ci.yaml"
+  pull_request:
+    paths:
+      - "pom.xml"
+      - "**/pom.xml"
+      - "**/src/**"
+      - ".github/workflows/ci.yaml"
+
+jobs:
+  package:
+    name: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Package
+        run: mvn -B -DskipTests package
