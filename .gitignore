@@ -1,1 +1,4 @@
 docs/
+
+# Maven build output
+target/
